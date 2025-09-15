@@ -1,3 +1,5 @@
+import { DATA, dataType } from "@/data/appData";
+import colors from "@/styles/colors";
 import defaultStyles from "@/styles/defaultStyles";
 import { useState } from "react";
 import {
@@ -7,21 +9,11 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import ListItemSeperator from "./components/ListItemSeperator";
 
 export default function Index() {
 
-  type dataType = {
-    id: string; //unique identifier
-    title: string; // text shown
-  }
-
-  const DATA: dataType[] = [
-    {id: "1", title: "First Item"},
-    {id: "2", title: "Second Item"},
-    {id: "3", title: "Third Item"},
-    {id: "4", title: "Fourth Item"},
-
-  ];
+  
 
   //function saying what was selected
 
@@ -41,12 +33,27 @@ export default function Index() {
         <View style={styles.flatlist}>
           <FlatList
             data={DATA}
+            extraData={selectedId}
             keyExtractor={(item:dataType) => item.id}
+            ItemSeparatorComponent={()=>
+            <ListItemSeperator color={colors.text.dark}/>}
             renderItem={({item}) =>
               (
                 <TouchableOpacity onPress={() => selectedList(item)}>
-                  <View style ={[styles.flatListRow, {flex:1}]}>
-                    <Text style={{color:'white', textAlign:'center'}}>{item.title}</Text>
+                  <View style ={[styles.flatListRow, {
+                    flex:1,
+                    backgroundColor: item.id === selectedId
+                    ? colors.primary
+                    : colors.secondary,
+                    }]}>
+                    <Text style={[{color:'white', textAlign:'center'},
+                      {
+                        color:
+                          item.id === selectedId
+                          ? colors.text.light
+                          : colors.text.dark,
+                      }
+                    ]}>{item.title}</Text>
                   </View>
                 </TouchableOpacity>
               )}
